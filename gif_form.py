@@ -14,7 +14,7 @@ def my_form():
 def my_form_post():
 	uuid = request.form['text']
 	title = animated_gif_function.create_gif(uuid)
-	return send_file(title+'.gif', mimetype='image/gif')
+	return send_file('./gifs/'+title+'.gif', mimetype='image/gif')
 
 if __name__ == '__main__':
     app.debug = True
