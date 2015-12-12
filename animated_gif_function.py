@@ -93,18 +93,18 @@ def create_gif(uuid):
 	print "folder title will be '"+title+"'"
 
 	#Create folder based on the item title
-	if not os.path.exists('./gifs/'+title):
-	    os.makedirs('./gifs/'+title)
+	if not os.path.exists(title):
+	    os.makedirs(title)
 
 	# #Create the two kinds of derivs in the item-title folder
 	img_url_base = "http://images.nypl.org/index.php?id="
 	derivs = [animated_gif_deriv]
 
-	if not os.path.isfile('./gifs/'+title+'.gif'):
+	if not os.path.isfile(title+'.gif'):
 		for j in derivs:
 			for i in range(number_of_captures):
-				if not os.path.isfile('./gifs/'+title+'/'+str(captures[i])+str(j)+'.gif'):
-					urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+str(j),'./gifs/'+title+'/'+str(captures[i])+str(j)+'.jpg')
+				if not os.path.isfile(title+'/'+str(captures[i])+str(j)+'.gif'):
+					urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+str(j),title+'/'+str(captures[i])+str(j)+'.jpg')
 					print captures[i], j, i+1, "of", number_of_captures
 					i+=1
 				else:
@@ -116,17 +116,18 @@ def create_gif(uuid):
 	# Call the ImageMagick 'convert' program to string all of the frames
 	# together into an animated GIF
 	print "Creating animated.gif ..."
-	if not os.path.isfile('./gifs/'+title+'.gif'):
-		os.system("convert -delay 20 -loop 0 ./gifs/%s/*%s.jpg -coalesce -gravity center ./gifs/%s.gif" % (title, animated_gif_deriv, title)) 
-		os.system("rm -rf ./gifs/%s" % (title))
+	if not os.path.isfile(title+'.gif'):
+		os.system("convert -delay 20 -loop 0 ./gifs/%s/*%s.jpg -coalesce -gravity center %s.gif" % (title, animated_gif_deriv, title)) 
+		os.system("rm -rf %s" % (title))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
 	else:
-		os.system("rm -rf ./gifs/%s" % (title))
+		os.system("rm -rf %s" % (title))
 		print "%s.gif already exists!" % (title)
 
 	print "You're all set!"
-	return send_file('./gifs/'+title+'.gif', mimetype='image/gif')
+	return send_file(title+'.gif', mimetype='image/gif')
 
 if __name__ == '__main__':
+	uuid =  raw_input('Enter a file UUID: ')
 	create_gif(uuid)
