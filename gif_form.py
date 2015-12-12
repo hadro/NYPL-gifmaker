@@ -19,7 +19,7 @@ def my_form_post():
 	if request.method == 'POST':
 		uuid = request.form['text']
 		title = animated_gif_function.create_gif(uuid)
-		return send_file('./gifs/'+title+'.gif', mimetype='image/gif')
+		return send_file('../public/gifs/'+title+'.gif', mimetype='image/gif')
 
 if __name__ == '__main__':
     app.debug = True
