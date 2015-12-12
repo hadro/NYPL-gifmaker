@@ -6,7 +6,6 @@ import os.path
 import string
 import configparser
 import sys
-from flask import send_file
 
 def create_gif(uuid):
 	UUID = uuid
@@ -21,6 +20,7 @@ def create_gif(uuid):
 	#find your DC token in the config file content (by section and name) and assign it to a variable
 	token = config.get('DC','token')
 	#saving the base url in your config file will make it easier to find next time you want to use it
+	
 	base = 'http://api.repo.nypl.org/api/v1/items/'
 	auth = 'Token token=' + token
 
@@ -117,7 +117,7 @@ def create_gif(uuid):
 	# together into an animated GIF
 	print "Creating animated.gif ..."
 	if not os.path.isfile(title+'.gif'):
-		os.system("convert -delay 20 -loop 0 ./gifs/%s/*%s.jpg -coalesce -gravity center %s.gif" % (title, animated_gif_deriv, title)) 
+		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center %s.gif" % (title, animated_gif_deriv, title)) 
 		os.system("rm -rf %s" % (title))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
@@ -126,7 +126,8 @@ def create_gif(uuid):
 		print "%s.gif already exists!" % (title)
 
 	print "You're all set!"
-	return send_file(title+'.gif', mimetype='image/gif')
+	#return send_file(title+'.gif', mimetype='image/gif')
+	return title
 
 if __name__ == '__main__':
 	uuid =  raw_input('Enter a file UUID: ')

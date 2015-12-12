@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask import send_file
 import animated_gif_function
 
 app = Flask(__name__)
@@ -12,8 +13,8 @@ def my_form():
 @app.route('/', methods=['POST'])
 def my_form_post():
 	uuid = request.form['text']
-	gif = animated_gif_function.create_gif(uuid)
-	return gif
+	title = animated_gif_function.create_gif(uuid)
+	return send_file(title+'.gif', mimetype='image/gif')
 
 if __name__ == '__main__':
     app.debug = True
