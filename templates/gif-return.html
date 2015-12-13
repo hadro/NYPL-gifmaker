@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-    <h1>Here is a GIF!</h1>
-    <div>
-    	<img src="static/gifs/{{gif_path}}.gif" alt="{{gif_path}}">
+    <h1>Here is your GIF!</h1>
+    <div id="create-gif">
+    	<img src="./static/gifs/{{gif_path}}.gif" alt="{{gif_path}}"><br />
     </div>
+    <div "previous-gifs">
+    <h2>The last few created gifs:</h2>
+    	<img src="{{previous_gifs[-2]}}" alt="{{gif_path}}"><br />
+    	<img src="{{previous_gifs[-3]}}" alt="{{gif_path}}">
+    </div>	
 </body>
 </html>
