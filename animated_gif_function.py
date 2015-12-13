@@ -4,29 +4,20 @@ import requests
 import urllib
 import os.path
 import string
-import configparser
 import sys
 
-def create_gif(uuid):
+def create_gif(uuid, gif_size):
 	UUID = uuid
-
-	animated_gif_deriv = "t"
+	animated_gif_deriv = gif_size
 
 	#Housekeeping
-
-	#create an instance of configparser, then read your config file into it
-	config = configparser.ConfigParser()
-	config.read('config.cfg')
-	#find your DC token in the config file content (by section and name) and assign it to a variable
-	token = config.get('DC','token')
-	#saving the base url in your config file will make it easier to find next time you want to use it
-	
 	base = 'http://api.repo.nypl.org/api/v1/items/'
-	auth = 'Token token=' + token
+	auth = 'Token token=4t2gkh9vetsh35av'
 
 	#Make sure it's a valid UUID
 	if len(UUID) != 36:
-		return "That doesn't look like a UUID -- try again!"
+		print "That doesn't look like a UUID -- try again!"
+		return (False, "That doesn't look like a UUID -- try again!")
 	else:
 		print "OK, that ID looks correct, looking it up now..."
 
@@ -35,17 +26,17 @@ def create_gif(uuid):
 	def getCaptures(uuid, titles='yes'):
 	    url = base + uuid
 	    if titles == 'yes':
-	        url = url + '?withTitles=yes&per_page=500'
+	        url = url + '?withTitles=yes&per_page=100'
 	    call = requests.get(url, headers={'Authorization': auth})
 	    return call.json()
 
 	def getItem(uuid):
-		url = base + '/mods/' + uuid + '?per_page=500'
+		url = base + '/mods/' + uuid + '?per_page=100'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
 	def getContainer(uuid):
-		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=500'
+		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=100'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
@@ -93,7 +84,7 @@ def create_gif(uuid):
 	public_path = '../public/gifs/'
 
 	#Create folder based on the item title
-	if not os.path.exists(public_path+title):
+	if not os.path.isfile(public_path+title+'.gif'):
 	    os.makedirs(public_path+title)
 
 	# #Create the two kinds of derivs in the item-title folder
@@ -111,7 +102,7 @@ def create_gif(uuid):
 					print "file %s as %s deriv type already exists" % (captures[i], j)
 					i+=1
 	else:
-		return "%s.gif already exists!" % (title)
+		return title
 
 	# Call the ImageMagick 'convert' program to string all of the frames
 	# together into an animated GIF
@@ -123,10 +114,9 @@ def create_gif(uuid):
 		print "Cleaning up now..."
 	else:
 		os.system("rm -rf ../public/gifs/%s" % (title))
-		print "%s.gif already exists!" % (title)
+		return title
 
 	print "You're all set!"
-	#return send_file(title+'.gif', mimetype='image/gif')
 	return title
 
 if __name__ == '__main__':

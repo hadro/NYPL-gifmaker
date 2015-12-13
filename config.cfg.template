@@ -1,7 +1,0 @@
-#config.cfg
-#no need to put quotes around your password strings
-
-[DC]
-token = PUT_API_TOKEN_HERE
-
-
