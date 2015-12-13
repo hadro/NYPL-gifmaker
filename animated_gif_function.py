@@ -81,7 +81,7 @@ def create_gif(uuid, gif_size):
 	title = title[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
 	print "folder title will be '"+title+"'"
 
-	public_path = '../public/gifs/'
+	public_path = './static/gifs/'
 
 	#Create folder based on the item title
 	if not os.path.isfile(public_path+title+'.gif'):
@@ -108,12 +108,12 @@ def create_gif(uuid, gif_size):
 	# together into an animated GIF
 	print "Creating animated.gif ..."
 	if not os.path.isfile(public_path+title+'.gif'):
-		os.system("convert -delay 20 -loop 0 ../public/gifs/%s/*%s.jpg -coalesce -gravity center ../public/gifs/%s.gif" % (title, animated_gif_deriv, title)) 
-		os.system("rm -rf ../public/gifs/%s" % (title))
+		os.system("convert -delay 20 -loop 0 ./static/gifs/%s/*%s.jpg -coalesce -gravity center ./static/gifs/%s.gif" % (title, animated_gif_deriv, title)) 
+		os.system("rm -rf ./static/gifs/%s" % (title))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
 	else:
-		os.system("rm -rf ../public/gifs/%s" % (title))
+		os.system("rm -rf ./static/gifs/%s" % (title))
 		return title
 
 	print "You're all set!"

@@ -17,7 +17,8 @@ def my_form_post():
 	size = request.form['size']
 	title = animated_gif_function.create_gif(uuid, size)
 	if title[0] != False:
-		return send_file('../public/gifs/'+title+'.gif', mimetype='image/gif')
+		#return send_file('../public/gifs/'+title+'.gif', mimetype='image/gif')
+		return render_template('gif-return.html', gif_path=title)
 	else:
 		return title[1]
 
