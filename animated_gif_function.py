@@ -128,4 +128,5 @@ def create_gif(uuid, gif_size):
 
 if __name__ == '__main__':
 	uuid =  raw_input('Enter a file UUID: ')
-	create_gif(uuid)
+	gif_size = raw_input('Enter a gif size: ')
+	create_gif(uuid, gif_size)

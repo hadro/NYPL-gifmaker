@@ -1,5 +1,7 @@
 *.cfg
 venv/
 *.pyc
-static/gifs/*
+static/gifs*
 modded.py
+
+previous.py
