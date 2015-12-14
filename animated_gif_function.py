@@ -88,21 +88,21 @@ def create_gif(uuid, gif_size):
 	title = title[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
 	print "folder title will be '"+title+"'"
 
-	public_path = './static/gifs/'
+	title_path = './static/gifs/'+title
 
 	#Create folder based on the item title
-	if not os.path.isfile(public_path+title+'.gif'):
-	    os.makedirs(public_path+title)
+	if not os.path.isfile(title_path+'.gif'):
+	    os.makedirs(title_path)
 
 	# #Create the two kinds of derivs in the item-title folder
 	img_url_base = "http://images.nypl.org/index.php?id="
 	derivs = [animated_gif_deriv]
 
-	if not os.path.isfile(public_path+title+'.gif'):
+	if not os.path.isfile(title_path+'.gif'):
 		for j in derivs:
 			for i in range(number_of_captures):
-				if not os.path.isfile(public_path+title+'/'+str(captures[i])+str(j)+'.gif'):
-					urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+str(j),public_path+title+'/'+str(captures[i])+str(j)+'.jpg')
+				if not os.path.isfile(title_path+'/'+str(captures[i])+str(j)+'.gif'):
+					urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+str(j),title_path+'/'+str(captures[i])+str(j)+'.jpg')
 					print captures[i], j, i+1, "of", number_of_captures
 					i+=1
 				else:
@@ -114,13 +114,13 @@ def create_gif(uuid, gif_size):
 	# Call the ImageMagick 'convert' program to string all of the frames
 	# together into an animated GIF
 	print "Creating animated.gif ..."
-	if not os.path.isfile(public_path+title+'.gif'):
-		os.system("convert -delay 20 -loop 0 %s%s/*%s.jpg -coalesce -gravity center ./static/gifs/%s.gif" % (public_path, title, animated_gif_deriv, title)) 
-		os.system("rm -rf ./static/gifs/%s" % (title))
+	if not os.path.isfile(title_path+'.gif'):
+		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center ./static/gifs/%s.gif" % (title_path, animated_gif_deriv, title)) 
+		os.system("rm -rf %s" % (title_path))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
 	else:
-		os.system("rm -rf ./static/gifs/%s" % (title))
+		os.system("rm -rf %s" % (title_path))
 		return title
 
 	print "You're all set!"
