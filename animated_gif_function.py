@@ -26,17 +26,17 @@ def create_gif(uuid, gif_size):
 	def getCaptures(uuid, titles='yes'):
 	    url = base + uuid
 	    if titles == 'yes':
-	        url = url + '?withTitles=yes&per_page=100'
+	        url = url + '?withTitles=yes&per_page=150'
 	    call = requests.get(url, headers={'Authorization': auth})
 	    return call.json()
 
 	def getItem(uuid):
-		url = base + '/mods/' + uuid + '?per_page=100'
+		url = base + '/mods/' + uuid + '?per_page=150'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
 	def getContainer(uuid):
-		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=100'
+		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=150'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
@@ -48,6 +48,8 @@ def create_gif(uuid, gif_size):
 	isContainer = int(containerResponse['nyplAPI']['response']['numItems'])
 	number_of_captures = int(captureResponse['nyplAPI']['response']['numResults'])
 
+	# if number_of_captures > 150:
+	# 	return (False, "So sorry, that UUID has more images than we can glue together into a GIF right now! Try another?")
 	# #Check to make sure we don't accidentally have a container or a collection UUID here
 	# if isContainer > 0 and number_of_captures > 0:
 	# 	sys.exit("This is a container, let's bail.")
@@ -67,10 +69,15 @@ def create_gif(uuid, gif_size):
 
 	#OK, enough checking, let's get the actual captures!
 	captures = []
-
-	for i in range(number_of_captures):
-		captureID = itemResponse['nyplAPI']['response']['capture'][i]['imageID']
-		captures.append(captureID)
+	if number_of_captures >150:
+		for i in range(150):
+			captureID = itemResponse['nyplAPI']['response']['capture'][i]['imageID']
+			captures.append(captureID)
+		number_of_captures = 150
+	else:
+		for i in range(number_of_captures):
+			captureID = itemResponse['nyplAPI']['response']['capture'][i]['imageID']
+			captures.append(captureID)
 
 	#print captures
 
@@ -108,7 +115,7 @@ def create_gif(uuid, gif_size):
 	# together into an animated GIF
 	print "Creating animated.gif ..."
 	if not os.path.isfile(public_path+title+'.gif'):
-		os.system("convert -delay 20 -loop 0 ./static/gifs/%s/*%s.jpg -coalesce -gravity center ./static/gifs/%s.gif" % (title, animated_gif_deriv, title)) 
+		os.system("convert -delay 20 -loop 0 %s%s/*%s.jpg -coalesce -gravity center ./static/gifs/%s.gif" % (public_path, title, animated_gif_deriv, title)) 
 		os.system("rm -rf ./static/gifs/%s" % (title))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."

@@ -5,6 +5,7 @@ from flask import send_file
 import animated_gif_function
 import glob
 import os
+import re
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -19,8 +20,17 @@ def my_form():
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-	uuid = request.form['text']
+	url = request.form['text']
 	size = request.form['size']
+	
+	#Check for last UUID in a URL:
+	for uuid in re.finditer(r'([a-f0-9-]{36})', url):
+		pass
+	if uuid != None:
+		uuid = uuid.group()
+	else:
+		return "That doesn't look like a URL we can handle! Try again?"
+
 	title = animated_gif_function.create_gif(uuid, size)
 	if title[0] != False:
 		#return send_file('../public/gifs/'+title+'.gif', mimetype='image/gif')
