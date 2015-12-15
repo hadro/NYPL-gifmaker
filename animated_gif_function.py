@@ -118,11 +118,11 @@ def create_gif(uuid, gif_size):
 	print "Creating animated.gif ..."
 	if not os.path.isfile(title_path+'.gif'):
 		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center %s/%s.gif" % (title_path, animated_gif_deriv, gif_path, title)) 
-		#os.system("rm -rf %s" % (title_path))
+		os.system("rm -rf %s/" % (title_path))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
 	else:
-		#os.system("rm -rf %s" % (title_path))
+		os.system("rm -rf %s/" % (title_path))
 		return title
 
 	print "You're all set!"
