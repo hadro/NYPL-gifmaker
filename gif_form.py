@@ -43,7 +43,7 @@ def my_form_post():
 			gif_files.sort(key=os.path.getmtime)
 			for file in gif_files:
 				gifs.append(os.path.basename(file))
-			return render_template('gif-return.html', gif_path=title, previous_gifs=gifs[-4:])
+			return render_template('gif-return.html', gif_path=title, previous_gifs=gifs[-5:])
 	else:
 		return title[1]
 
