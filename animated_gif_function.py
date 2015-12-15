@@ -88,7 +88,9 @@ def create_gif(uuid, gif_size):
 	title = title[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
 	print "folder title will be '"+title+"'"
 
-	title_path = '/home/phantor/nypl-gifmaker.phantor.net/gifmaker2/static/gifs/'+title
+	gif_path = '/home/phantor/nypl-gifmaker.phantor.net/gifmaker2/static/gifs/'
+	title_path = gif_path+title
+
 
 	#Create folder based on the item title
 	if not os.path.isfile(title_path+'.gif'):
@@ -115,7 +117,7 @@ def create_gif(uuid, gif_size):
 	# together into an animated GIF
 	print "Creating animated.gif ..."
 	if not os.path.isfile(title_path+'.gif'):
-		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center %s/%s.gif" % (title_path, animated_gif_deriv, title_path, title)) 
+		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center %s/%s.gif" % (title_path, animated_gif_deriv, gif_path, title)) 
 		#os.system("rm -rf %s" % (title_path))
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
