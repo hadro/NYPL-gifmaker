@@ -2,41 +2,7 @@
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-  body {
-    font-family:"Kievit","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
-    margin: 0 20px;
-    padding: 0;
-    background: #161514;
-  }
-  a {
-    color: #0171A1;
-  }
-  .container {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-    box-sizing: border-box;
-    background: #E8E4E2;
-  }
-  .container > *:first-child {
-    margin: -20px -20px 20px -20px;
-    padding: 20px;
-    background: #71695D;
-    color: white;
-  }
-  .previous-gifs img {
-    display: inline-block;
-    margin: 1em;
-  }
-  @font-face{
-    font-family:"Kievit";
-    font-style:normal;
-    font-weight:400;
-    src:url("http://ux-static.nypl.org.s3-website-us-east-1.amazonaws.com/ff_kievit_web/KievitWeb-Book.woff") format("woff")
-  }
-  </style>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   <div class="container">
