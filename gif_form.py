@@ -8,7 +8,7 @@ import os
 import re
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
+#app.config['DEBUG'] = True
 
 @app.route('/')
 def my_form():
@@ -49,5 +49,5 @@ def my_form_post():
 		return title[1]
 
 if __name__ == '__main__':
-	app.debug = True
+	#app.debug = True
 	app.run()
