@@ -13,10 +13,13 @@ app.config['DEBUG'] = True
 @app.route('/')
 def my_form():
 	gif_files = []
-	for file in glob.glob('./static/gifs/*.gif'):
+	gifs = []
+	for file in glob.glob('/home/phantor/nypl-gifmaker.phantor.net/gifmaker2/static/gifs/*.gif'):
 		gif_files.append(file)
 	gif_files.sort(key=os.path.getmtime)
-	return render_template("gif.html", previous_gifs=gif_files[-4:])
+	for file in gif_files:
+		gifs.append(os.path.basename(file))
+	return render_template("gif.html", previous_gifs=gifs[-4:])
 
 @app.route('/', methods=['POST'])
 def my_form_post():
@@ -33,14 +36,14 @@ def my_form_post():
 
 	title = animated_gif_function.create_gif(uuid, size)
 	if title[0] != False:
-		#return send_file('../public/gifs/'+title+'.gif', mimetype='image/gif')
-		gif_files = []
-		for file in glob.glob('./static/gifs/*.gif'):
-			gif_files.append(file)
-		gif_files.sort(key=os.path.getmtime)
-
-		print gif_files[-2:]
-		return render_template('gif-return.html', gif_path=title, previous_gifs=gif_files[-4:])
+			gif_files = []
+			gifs = []
+			for file in glob.glob('/home/phantor/nypl-gifmaker.phantor.net/gifmaker2/static/gifs/*.gif'):
+				gif_files.append(file)
+			gif_files.sort(key=os.path.getmtime)
+			for file in gif_files:
+				gifs.append(os.path.basename(file))
+			return render_template('gif-return.html', gif_path=title, previous_gifs=gif_files[-4:])
 	else:
 		return title[1]
 
