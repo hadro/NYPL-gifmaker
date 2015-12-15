@@ -27,6 +27,7 @@ def my_form_post():
 	size = request.form['size']
 	
 	#Check for last UUID in a URL:
+	uuid = None
 	for uuid in re.finditer(r'([a-f0-9-]{36})', url):
 		pass
 	if uuid != None:
