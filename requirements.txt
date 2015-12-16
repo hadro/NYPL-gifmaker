@@ -1,3 +1,4 @@
+--allow-all-external
 --allow-unverified vboxapi
 awscli==1.9.12
 boto3==1.2.2
