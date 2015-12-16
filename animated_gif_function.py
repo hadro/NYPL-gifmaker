@@ -5,7 +5,7 @@ import urllib
 import os.path
 import string
 import sys
-from flask_s3 import FlaskS3
+#from flask_s3 import FlaskS3
 
 def create_gif(uuid, gif_size):
 	UUID = uuid
