@@ -8,7 +8,7 @@ import animated_gif_function
 
 
 app = Flask(__name__)
-app.config.from_object('config')
+#app.config.from_object('config')
 
 
 @app.route('/')
