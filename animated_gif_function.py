@@ -6,6 +6,9 @@ import os.path
 import string
 import sys
 #from flask_s3 import FlaskS3
+import boto3
+
+client = boto3.client('s3')
 
 def create_gif(uuid, gif_size):
 	UUID = uuid
@@ -127,9 +130,8 @@ def create_gif(uuid, gif_size):
 		return title
 
 	print "You're all set!"
+	client.upload_file(title_path+'.gif', 'gifmaker-test', title_path+'.gif')
 	return title
 
 if __name__ == '__main__':
-	uuid =  raw_input('Enter a file UUID: ')
-	gif_size = raw_input('Enter a gif size: ')
 	create_gif(uuid, gif_size)

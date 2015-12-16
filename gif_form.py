@@ -5,6 +5,9 @@ import glob
 import os
 import re
 import animated_gif_function
+import boto3
+
+client = boto3.client('s3')
 
 
 app = Flask(__name__)
@@ -50,5 +53,5 @@ def my_form_post():
 		return title[1]
 
 if __name__ == '__main__':
-	#app.debug = True
+	app.debug = True
 	app.run()
