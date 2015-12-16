@@ -1,20 +1,21 @@
-from flask import Flask
-from flask import request
-from flask import render_template
-from flask import send_file
-import animated_gif_function
+from flask import Flask, request, render_template, send_file
+#from flask_s3 import FlaskS3
+import boto3
 import glob
 import os
 import re
+import animated_gif_function
+
 
 app = Flask(__name__)
-#app.config['DEBUG'] = True
+app.config.from_object('config')
+
 
 @app.route('/')
 def my_form():
 	gif_files = []
 	gifs = []
-	for file in glob.glob('/home/phantor/gifmaker.phantor.net/gifmaker2/static/gifs/*.gif'):
+	for file in glob.glob('static/gifs/*.gif'):
 		gif_files.append(file)
 	gif_files.sort(key=os.path.getmtime)
 	for file in gif_files:
@@ -39,7 +40,7 @@ def my_form_post():
 	if title[0] != False:
 			gif_files = []
 			gifs = []
-			for file in glob.glob('/home/phantor/gifmaker.phantor.net/gifmaker2/static/gifs/*.gif'):
+			for file in glob.glob('static/gifs/*.gif'):
 				gif_files.append(file)
 			gif_files.sort(key=os.path.getmtime)
 			for file in gif_files:

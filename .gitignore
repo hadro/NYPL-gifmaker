@@ -5,3 +5,7 @@ static/gifs*
 modded.py
 
 previous.py
+
+config.py
+
+s3.py

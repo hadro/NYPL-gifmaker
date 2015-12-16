@@ -5,6 +5,7 @@ import urllib
 import os.path
 import string
 import sys
+from flask_s3 import FlaskS3
 
 def create_gif(uuid, gif_size):
 	UUID = uuid
@@ -88,7 +89,7 @@ def create_gif(uuid, gif_size):
 	title = title[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
 	print "folder title will be '"+title+"'"
 
-	gif_path = '/home/phantor/gifmaker.phantor.net/gifmaker2/static/gifs/'
+	gif_path = 'static/gifs/'
 	title_path = gif_path+title
 
 
