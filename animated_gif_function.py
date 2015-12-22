@@ -94,50 +94,36 @@ def create_gif(uuid, gif_size):
 
 	gif_path = 'static/gifs/'
 	title_path = gif_path+title
-
+	img_url_base = "http://images.nypl.org/index.php?id="
+	derivs = [animated_gif_deriv]
+	delay = 20
 
 	#Create folder based on the item title
 	if not os.path.isfile(title_path+'.gif'):
-	    os.makedirs(title_path)
-	else:
-		shutil.rmtree(title_path)
-
-	# #Create the two kinds of derivs in the item-title folder
-	img_url_base = "http://images.nypl.org/index.php?id="
-	derivs = [animated_gif_deriv]
-
-	if not os.path.isfile(title_path+'.gif'):
-		for j in derivs:
-			for i in range(number_of_captures):
-				if not os.path.isfile(title_path+'/'+str(captures[i])+str(j)+'.gif'):
-					urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+str(j),title_path+'/'+str(captures[i])+str(j)+'.jpg')
-					print captures[i], j, i+1, "of", number_of_captures
-					i+=1
-				else:
-					print "file %s as %s deriv type already exists" % (captures[i], j)
-					i+=1
-	else:
-		return title
-
-	# Call the ImageMagick 'convert' program to string all of the frames
-	# together into an animated GIF
-	print "Creating animated.gif ..."
-	delay = 20
-	if not os.path.isfile(title_path+'.gif'):
+		os.makedirs(title_path)
+		for i in range(number_of_captures):
+			if not os.path.isfile(title_path+'/'+str(captures[i])+animated_gif_deriv+'.gif'):
+				urllib.urlretrieve(img_url_base+str(captures[i])+'&t='+animated_gif_deriv,title_path+'/'+str(captures[i])+animated_gif_deriv+'.jpg')
+				print captures[i], animated_gif_deriv, i+1, "of", number_of_captures
+				i+=1
+			else:
+				print "file %s as %s deriv type already exists" % (captures[i], animated_gif_deriv)
+				i+=1
 		cmd = ["convert", "-delay", str(delay), title_path+'/*'+animated_gif_deriv+'.jpg', "-layers", "optimize",  gif_path+'/'+title+'.gif']
 		subprocess.call(cmd)
 		shutil.rmtree(title_path)
-		print "Done creating animated.gif"
-		print "Cleaning up now..."
 	else:
-		shutil.rmtree(title_path)
 		return title
+
+
+	# Call the ImageMagick 'convert' program to string all of the frames
+	# together into an animated GIF
 
 	print "You're all set!"
 	client.upload_file(title_path.decode('utf-8')+'.gif', 'gifmaker-test', title_path.decode('utf-8')+'.gif')
 	return title
 
 if __name__ == '__main__':
-	# uuid = raw_input("UUID: ")
-	# gif_size = raw_input("Size: ")
+	uuid = raw_input("UUID: ")
+	gif_size = raw_input("Size: ")
 	create_gif(uuid, gif_size)
