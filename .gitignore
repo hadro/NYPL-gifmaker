@@ -3,9 +3,13 @@ venv/
 *.pyc
 static/gifs*
 modded.py
-
 previous.py
-
 config.py
-
 s3.py
+gif-to-dos.txt
+
+flasks3.py
+
+title.py
+
+animated_gif_function-with-print.py

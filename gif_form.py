@@ -1,18 +1,13 @@
 from flask import Flask, request, render_template, send_file
-#from flask_s3 import FlaskS3
-#import boto3
+from flask_s3 import FlaskS3
 import glob
 import os
 import re
 import animated_gif_function
-import boto3
-
-client = boto3.client('s3')
-
 
 app = Flask(__name__)
-#app.config.from_object('config')
-
+app.config.from_object('config')
+s3 = FlaskS3(app)
 
 @app.route('/')
 def my_form():

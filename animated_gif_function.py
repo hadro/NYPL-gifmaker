@@ -5,7 +5,8 @@ import urllib
 import os.path
 import string
 import sys
-#from flask_s3 import FlaskS3
+import shutil
+import subprocess
 import boto3
 
 client = boto3.client('s3')
@@ -30,17 +31,17 @@ def create_gif(uuid, gif_size):
 	def getCaptures(uuid, titles='yes'):
 	    url = base + uuid
 	    if titles == 'yes':
-	        url = url + '?withTitles=yes&per_page=150'
+	        url = url + '?withTitles=yes&per_page=100'
 	    call = requests.get(url, headers={'Authorization': auth})
 	    return call.json()
 
 	def getItem(uuid):
-		url = base + '/mods/' + uuid + '?per_page=150'
+		url = base + '/mods/' + uuid + '?per_page=100'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
 	def getContainer(uuid):
-		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=150'
+		url = 'http://api.repo.nypl.org/api/v1/collections/' + uuid + '?per_page=100'
 		call = requests.get(url, headers={'Authorization': auth}) 
 		return call.json()
 
@@ -52,7 +53,7 @@ def create_gif(uuid, gif_size):
 	isContainer = int(containerResponse['nyplAPI']['response']['numItems'])
 	number_of_captures = int(captureResponse['nyplAPI']['response']['numResults'])
 
-	# if number_of_captures > 150:
+	# if number_of_captures > 100:
 	# 	return (False, "So sorry, that UUID has more images than we can glue together into a GIF right now! Try another?")
 	# #Check to make sure we don't accidentally have a container or a collection UUID here
 	# if isContainer > 0 and number_of_captures > 0:
@@ -73,11 +74,11 @@ def create_gif(uuid, gif_size):
 
 	#OK, enough checking, let's get the actual captures!
 	captures = []
-	if number_of_captures >150:
-		for i in range(150):
+	if number_of_captures >100:
+		for i in range(100):
 			captureID = itemResponse['nyplAPI']['response']['capture'][i]['imageID']
 			captures.append(captureID)
-		number_of_captures = 150
+		number_of_captures = 100
 	else:
 		for i in range(number_of_captures):
 			captureID = itemResponse['nyplAPI']['response']['capture'][i]['imageID']
@@ -88,8 +89,7 @@ def create_gif(uuid, gif_size):
 
 	#Grab the item title, and do some cleanup to make it usable as a folder name
 	table = string.maketrans("","")
-	title = str(itemResponse['nyplAPI']['response']['capture'][0]['title']).translate(table, string.punctuation).replace("  "," ").replace(" ","_")
-	title = title[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
+	title = itemResponse['nyplAPI']['response']['capture'][0]['title'].encode('utf-8').translate(table, string.punctuation).replace("  "," ").replace(" ","_")[:65].rstrip('_')+'_'+animated_gif_deriv+'_'+uuid
 	print "folder title will be '"+title+"'"
 
 	gif_path = 'static/gifs/'
@@ -99,6 +99,8 @@ def create_gif(uuid, gif_size):
 	#Create folder based on the item title
 	if not os.path.isfile(title_path+'.gif'):
 	    os.makedirs(title_path)
+	else:
+		shutil.rmtree(title_path)
 
 	# #Create the two kinds of derivs in the item-title folder
 	img_url_base = "http://images.nypl.org/index.php?id="
@@ -120,18 +122,22 @@ def create_gif(uuid, gif_size):
 	# Call the ImageMagick 'convert' program to string all of the frames
 	# together into an animated GIF
 	print "Creating animated.gif ..."
+	delay = 20
 	if not os.path.isfile(title_path+'.gif'):
-		os.system("convert -delay 20 -loop 0 %s/*%s.jpg -coalesce -gravity center %s/%s.gif" % (title_path, animated_gif_deriv, gif_path, title)) 
-		os.system("rm -rf %s/" % (title_path))
+		cmd = ["convert", "-delay", str(delay), title_path+'/*'+animated_gif_deriv+'.jpg', "-layers", "optimize",  gif_path+'/'+title+'.gif']
+		subprocess.call(cmd)
+		shutil.rmtree(title_path)
 		print "Done creating animated.gif"
 		print "Cleaning up now..."
 	else:
-		os.system("rm -rf %s/" % (title_path))
+		shutil.rmtree(title_path)
 		return title
 
 	print "You're all set!"
-	client.upload_file(title_path+'.gif', 'gifmaker-test', title_path+'.gif')
+	client.upload_file(title_path.decode('utf-8')+'.gif', 'gifmaker-test', title_path.decode('utf-8')+'.gif')
 	return title
 
 if __name__ == '__main__':
+	uuid = raw_input("UUID: ")
+	gif_size = raw_input("Size: ")
 	create_gif(uuid, gif_size)
