@@ -6,7 +6,6 @@ import re
 import animated_gif_function
 
 app = Flask(__name__)
-#app.config.from_object('config')
 s3 = FlaskS3(app)
 
 @app.route('/')
@@ -48,5 +47,5 @@ def my_form_post():
 		return title[1]
 
 if __name__ == '__main__':
-	app.debug = True
+	#app.debug = True
 	app.run()
