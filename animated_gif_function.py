@@ -17,7 +17,7 @@ def create_gif(uuid, gif_size):
 
 	#Housekeeping
 	base = 'http://api.repo.nypl.org/api/v1/items/'
-	auth = 'Token token=4t2gkh9vetsh35av'
+	auth = 'Token token='
 
 	#Make sure it's a valid UUID
 	if len(UUID) != 36:
